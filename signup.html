@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account - KurdishChat</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/847/847969.png" type="image/png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-tr from-green-100 to-blue-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+    <h2 class="text-3xl font-bold text-center text-green-600 mb-6">Create Account</h2>
+    <form id="signupForm">
+      <label class="block mb-2 font-medium">Username</label>
+      <input id="newUsername" type="text" placeholder="@username" class="w-full border px-4 py-2 rounded mb-4" required />
+
+      <label class="block mb-2 font-medium">Password</label>
+      <input id="newPassword" type="password" placeholder="••••••••" class="w-full border px-4 py-2 rounded mb-4" required />
+
+      <button type="submit" class="w-full bg-green-500 text-white font-semibold py-2 rounded hover:bg-green-600">Create Account</button>
+      <p id="signupMsg" class="text-green-600 mt-3 text-center hidden">Account created! Redirecting...</p>
+      <p id="errorMsg" class="text-red-500 mt-2 text-center hidden">Username already exists.</p>
+    </form>
+
+    <p class="text-center text-sm text-gray-600 mt-4">
+      Already have an account? <a href="login.html" class="text-blue-600 hover:underline">Log in</a>
+    </p>
+  </div>
+
+  <script>
+    const signupForm = document.getElementById('signupForm');
+    const signupMsg = document.getElementById('signupMsg');
+    const errorMsg = document.getElementById('errorMsg');
+
+    signupForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const username = document.getElementById('newUsername').value.trim();
+      const password = document.getElementById('newPassword').value.trim();
+
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+      const exists = users.find(user => user.username === username);
+
+      if (exists) {
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+
+      users.push({ username, password });
+      localStorage.setItem('users', JSON.stringify(users));
+
+      signupMsg.classList.remove('hidden');
+      errorMsg.classList.add('hidden');
+      setTimeout(() => window.location.href = 'login.html', 1500);
+    });
+  </script>
+</body>
+</html>
